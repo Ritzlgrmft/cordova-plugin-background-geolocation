@@ -23,6 +23,14 @@ In that case, also provide relevant parts of output of `adb logcat` command.
 # Android background service issues
 There are repeatedly reported issues with some android devices not working in the background. Check if your device model is on  [dontkillmyapp list](https://dontkillmyapp.com) before you report new issue. For more information check out [dontkillmyapp.com](https://dontkillmyapp.com/problem).
 
+Another confusing fact about Android services is concept of foreground services. Foreground service in context of Android OS is different thing than background geolocation service of this plugin (they're related thought). **Plugin's background geolocation service** actually **becomes foreground service** when app is in the background. Confusing, right? :D
+
+If service wants to continue to run in the background, it must "promote" itself to `foreground service`. Foreground services must have visible notification, which is the reason, why you can't disable drawer notification.
+
+The notification can only be disabled, when app is running in the foreground, by setting config option `startForeground: false` (this is the default option), but will always be visible in the background (if service was started).
+
+Recommend you to read https://developer.android.com/about/versions/oreo/bac
+
 ## Description
 
 Cross-platform geolocation for Cordova / PhoneGap with battery-saving "circular region monitoring" and "stop detection".
@@ -65,11 +73,13 @@ cordova plugin add @mauron85/cordova-plugin-background-geolocation \
 Or in `config.xml`:
 
 ```
-<plugin name="@mauron85/cordova-plugin-background-geolocation">
+<plugin name="cordova-plugin-background-geolocation" spec="@mauron85/cordova-plugin-background-geolocation@~3.1.0">
   <variable name="GOOGLE_PLAY_SERVICES_VERSION" value="11+" />
-  <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="23+" />
-  <variable name="ALWAYS_USAGE_DESCRIPTION" value="App requires background tracking enabled" />
-  <variable name="MOTION_USAGE_DESCRIPTION" value="App requires motion detection" />
+  <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="26+" />
+  <variable name="ICON" value="@mipmap/icon" />
+  <variable name="SMALL_ICON" value="@mipmap/icon" />
+  <variable name="ALWAYS_USAGE_DESCRIPTION" value="App requires background tracking " />
+  <variable name="MOTION_USAGE_DESCRIPTION" value="App requires motion detection" /> 
 </plugin>
 ```
 
@@ -175,7 +185,7 @@ function onDeviceReady() {
       // we need to set delay or otherwise alert may not be shown
       setTimeout(function() {
         var showSettings = confirm('App requires location tracking permission. Would you like to open app settings?');
-        if (showSetting) {
+        if (showSettings) {
           return BackgroundGeolocation.showAppSettings();
         }
       }, 1000);
@@ -279,7 +289,7 @@ BackgroundGeolocation.configure({
 
 In this case new configuration options will be merged with stored configuration options and changes will be applied immediately.
 
-**Important:** Because configuration options are applied partially, it's not possible to reset option to default value just by emitting it's key name and calling `configure` method. To reset configuration option to the default value, it's key must be set to `null`!
+**Important:** Because configuration options are applied partially, it's not possible to reset option to default value just by omitting it's key name and calling `configure` method. To reset configuration option to the default value, it's key must be set to `null`!
 
 ```
 // Example: reset postTemplate to default

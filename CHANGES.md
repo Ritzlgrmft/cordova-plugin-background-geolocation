@@ -1,5 +1,30 @@
 ## Changelog
 
+### [3.1.0] - 2019-09-24
+### Fixed
+- fix package scope
+- Android fix RejectedExecutionException
+- Android add stop guard
+
+### Changed
+- adopt headless task changes in common module
+
+### [3.0.7] - 2019-09-17
+### Fixed
+- Android Foreground service permission is required since Android 28 - @IsraelHikingMap
+
+### [3.0.6] - 2019-08-27
+### Fixed
+- Android allow to start service from background on API >=26
+
+### [3.0.5] - 2019-08-13
+### Fixed
+- Android fix tone generator crash
+- Fixed XML config to use to install plugin (PR #575) - @globules-io
+- Fixed typo in README - @diegogurpegui
+
+Many thanks to all contributors
+
 ### [3.0.1] - 2019-03-28
 ### Added
 - iOS implement config.stopOnTerminate using startMonitoringSignificantLocationChanges
