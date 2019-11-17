@@ -502,14 +502,26 @@ export interface BackgroundGeolocationPlugin {
   /**
    * Start background geolocation.
    * Platform: iOS, Android
+   *
+   * @param success
+   * @param fail
    */
-  start(): void;
+  start(
+    success?: () => void,
+    fail?: (error: BackgroundGeolocationError) => void	  
+  ): void;
 
   /**
    * Stop background geolocation.
    * Platform: iOS, Android
+   *
+   * @param success
+   * @param fail
    */
-  stop(): void;
+  stop(
+    success?: () => void,
+    fail?: (error: BackgroundGeolocationError) => void	  
+  ): void;
 
   /**
    * One time location check to get current location of the device.

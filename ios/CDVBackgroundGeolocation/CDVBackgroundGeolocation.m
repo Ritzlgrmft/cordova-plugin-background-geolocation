@@ -70,13 +70,17 @@ static NSString * const TAG = @"CDVBackgroundGeolocation";
     NSLog(@"%@ #%@", TAG, @"start");
     [self.commandDelegate runInBackground:^{
         NSError *error = nil;
-
-        [facade start:&error];
+		CDVPluginResult* result = nil;
+        
+		[facade start:&error];
         if (error == nil) {
             [self sendEvent:@"start"];
+			result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         } else {
             [self sendError:error];
+			result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:[self errorToDictionary:error]];
         }
+		[self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
 }
 
@@ -88,13 +92,17 @@ static NSString * const TAG = @"CDVBackgroundGeolocation";
     NSLog(@"%@ #%@", TAG, @"stop");
     [self.commandDelegate runInBackground:^{
         NSError *error = nil;
+		CDVPluginResult* result = nil;
 
         [facade stop:&error];
         if (error == nil) {
             [self sendEvent:@"stop"];
+			result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         } else {
             [self sendError:error];
+			result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:[self errorToDictionary:error]];
         }
+		[self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
 }
 
@@ -296,6 +304,9 @@ static NSString * const TAG = @"CDVBackgroundGeolocation";
 {
     int taskKey = [[command.arguments objectAtIndex: 0] intValue];
     [[MAURBackgroundTaskManager sharedTasks] endTaskWithKey:taskKey];
+
+	CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void) forceSync:(CDVInvokedUrlCommand*)command

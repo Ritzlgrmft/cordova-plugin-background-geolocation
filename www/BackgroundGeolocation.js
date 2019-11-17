@@ -92,13 +92,19 @@ var BackgroundGeolocation = {
     );
   },
 
-  start: function () {
-    exec(null, null, 'BackgroundGeolocation', 'start');
-  },
+  start: function (success, failure) {
+    exec(success || emptyFnc,
+		failure || emptyFnc,
+		'BackgroundGeolocation',
+		'start', []);
+	},
 
   stop: function (success, failure) {
-    exec(null, null, 'BackgroundGeolocation', 'stop');
-  },
+    exec(success || emptyFnc,
+		failure || emptyFnc,
+		'BackgroundGeolocation',
+		'stop', []);
+	},
 
   switchMode: function (mode, success, failure) {
     exec(success || emptyFnc,
