@@ -492,7 +492,7 @@ static NSString * const TAG = @"CDVBackgroundGeolocation";
        willPresentNotification:(UNNotification *)notification
          withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
 {
-    if (prevNotificationDelegate && [prevNotificationDelegate respondsToSelector:@selector(userNotificationCenter:willPresentNotification:withCompletionHandler:)])
+    if (prevNotificationDelegate && prevNotificationDelegate != self && [prevNotificationDelegate respondsToSelector:@selector(userNotificationCenter:willPresentNotification:withCompletionHandler:)])
     {
         // Give other delegates (like FCM) the chance to process this notification
 
